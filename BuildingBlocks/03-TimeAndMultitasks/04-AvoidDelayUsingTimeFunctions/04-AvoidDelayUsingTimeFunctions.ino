@@ -7,8 +7,10 @@
  * In this examples, for example, we simulate a dalay of 500ms using millis().
  */
 
-unsigned long previous_time = millis();
-unsigned long curr_time = 0;
+#define DELAY 500
+
+unsigned long previous_time = 0;
+unsigned long curr_time = millis();
 
 void setup() {
   Serial.begin(115200);
@@ -17,8 +19,11 @@ void setup() {
 
 void loop() {
   curr_time = millis();
-  if ((curr_time - previous_time) > 500) {
-    Serial.println("Hello");
-    previous_time = curr_time;
+  if ((curr_time - previous_time) > DELAY) {
+    Serial.println("Async Hello World!");
+    previous_time += DELAY;  // instead of curr_time we use DELAY value to avoid that 
+                             // the time taken by other instructions are not included 
+                             // in the delay count
+    Serial.println(millis());
   }
 }
