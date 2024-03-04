@@ -1,5 +1,5 @@
 /**
- * Blinking LEDs asunchronously using time functions (with delay() could be impossible!).
+ * Blinking LEDs asynchronously using time functions (with delay() could be impossible!).
  * Constraints:
  *  - LED1 must blink at 500ms
  *  - LED2 must fade-in/fade-out in 2560ms
@@ -46,7 +46,7 @@ void loop() {
 }
 
 /**
- * 
+ * The function change every time it is called the led's status.
  */
 void blink_led() {
   Serial.println("Set led Volt to: " + String(digitalRead(LED_1_PIN)));
