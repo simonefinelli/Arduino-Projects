@@ -10,6 +10,10 @@
  * 
  * In Arduino, Interrupts can be used only with Digital Pins and specific ones.
  * For example in Arduino Uno we can use 2 and 3 pins.
+ *
+ * An interrupt function cannot have a return type and have parameters.
+ * We must avoid to use Serial communication (like Serial.println()) 
+ * inside an interrupt function (it will not work).
  */
 
 #define LED_PIN 8
@@ -34,7 +38,7 @@ void loop() {
 
 }
 
-void btn_release_action() {  // an interrupt function cannot have a return type and have parameters
+void btn_release_action() {
   btn_release_flag = true;
 }
 
