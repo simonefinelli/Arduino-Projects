@@ -12,9 +12,9 @@
 // led config
 byte led_state = LOW;
 // interrrupt
-volatile bool btn_release_flag = false;  // 'volatile' allows the modification of a variable into an interrupted function
+volatile bool btn_press_flag = false;  // 'volatile' allows the modification of a variable into an interrupted function
 // debounce behaviour
-volatile unsigned long last_time_button_released = millis();
+volatile unsigned long last_time_button_pressed = millis();
 volatile unsigned long curr_time = 0;
 volatile unsigned long debounce_delay = 50;
 
@@ -33,8 +33,8 @@ void setup() {
 }
 
 void loop() {
-  if (btn_release_flag) {
-    btn_release_flag = false;
+  if (btn_press_flag) {
+    btn_press_flag = false;
     toggle_led();
   }
 
@@ -42,9 +42,9 @@ void loop() {
 
 void btn_release_action() {  // an interrupt function cannot have a return type and have parameters
   curr_time = millis();
-  if (curr_time - last_time_button_released > debounce_delay) {
-    last_time_button_released = curr_time; // update debounce dealy time 
-    btn_release_flag = true;
+  if (curr_time - last_time_button_pressed > debounce_delay) {
+    last_time_button_pressed = curr_time; // update debounce dealy time 
+    btn_press_flag = true;
   }
 }
 

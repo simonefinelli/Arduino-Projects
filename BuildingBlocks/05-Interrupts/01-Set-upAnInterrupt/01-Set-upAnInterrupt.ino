@@ -20,26 +20,26 @@
 #define BTN_PIN 2
 
 byte led_state = LOW;
-volatile bool btn_release_flag = false;  // volatile is used to access the variable into an interrupted function
+volatile bool btn_press_flag = false;  // volatile is used to access the variable into an interrupted function
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   pinMode(BTN_PIN, INPUT);
   attachInterrupt(digitalPinToInterrupt(BTN_PIN),
-                  btn_release_action,
+                  btn_press_action,
                   FALLING); // set-up interrupt with Falling politic
 }
 
 void loop() {
-  if (btn_release_flag) {
-    btn_release_flag = false;
+  if (btn_press_flag) {
+    btn_press_flag = false;
     toggle_led();
   }
 
 }
 
-void btn_release_action() {
-  btn_release_flag = true;
+void btn_press_action() {
+  btn_press_flag = true;
 }
 
 void toggle_led() {
