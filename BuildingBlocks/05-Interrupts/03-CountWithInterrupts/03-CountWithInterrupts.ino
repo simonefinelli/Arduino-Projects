@@ -5,9 +5,9 @@
 
 #define BTN_PIN 2
 
+unsigned long counter = 0;  // 'volatile' allows the modification of a variable into an interrupted function
 // interrrupt
 volatile bool btn_press_flag = false;
-volatile unsigned long counter = 0;  // 'volatile' allows the modification of a variable into an interrupted function
 // debounce behaviour
 volatile unsigned long last_time_button_pressed = millis();
 volatile unsigned long curr_time = 0;
@@ -29,16 +29,16 @@ void setup() {
 void loop() {
   if (btn_press_flag) {
     btn_press_flag = false;
+    counter++;  // 
     Serial.println("The Button is pressed for " + String(counter) + " times!");
   }
 
 }
 
-void btn_press_action() {  // an interrupt function cannot have a return type and have parameters
+void btn_press_action() {  // the function raised by interrupt must be as streamlined as possible
   curr_time = millis();
   if (curr_time - last_time_button_pressed > debounce_delay) {
     last_time_button_pressed = curr_time; // update debounce dealy time 
     btn_press_flag = true;
-    counter++;
   }
 }
