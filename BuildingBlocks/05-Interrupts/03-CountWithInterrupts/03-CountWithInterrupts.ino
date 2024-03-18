@@ -5,8 +5,6 @@
 
 #define BTN_PIN 2
 
-// led config
-byte led_state = LOW;
 // interrrupt
 volatile bool btn_press_flag = false;
 volatile unsigned long counter = 0;  // 'volatile' allows the modification of a variable into an interrupted function
@@ -24,8 +22,8 @@ void setup() {
 
   // define interrupt
   attachInterrupt(digitalPinToInterrupt(BTN_PIN),
-                  btn_release_action,
-                  FALLING); // set-up interrupt with Falling politic
+                  btn_press_action,
+                  RISING); // set-up interrupt with Rising politic
 }
 
 void loop() {
@@ -36,7 +34,7 @@ void loop() {
 
 }
 
-void btn_release_action() {  // an interrupt function cannot have a return type and have parameters
+void btn_press_action() {  // an interrupt function cannot have a return type and have parameters
   curr_time = millis();
   if (curr_time - last_time_button_pressed > debounce_delay) {
     last_time_button_pressed = curr_time; // update debounce dealy time 
