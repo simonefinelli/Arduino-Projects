@@ -3,8 +3,8 @@
  * Only when the Function has finished her job, the program continues.
  * 
  * There are 4 types of interrupts:
- *  - RISING: when signal goes from Low to High
- *  - FALLING: when signal goes from High to Low
+ *  - RISING: when signal goes from Low to High (Button is pressed)
+ *  - FALLING: when signal goes from High to Low (Button is released)
  *  - CHANGE: Rising <-> Falling
  *  - LOW: Whenever the signal is Low
  * 
