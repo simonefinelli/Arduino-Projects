@@ -29,7 +29,7 @@ void setup() {
 void loop() {
   if (btn_press_flag) {
     btn_press_flag = false;
-    counter++;  // 
+    counter++;
     Serial.println("The Button is pressed for " + String(counter) + " times!");
   }
 
