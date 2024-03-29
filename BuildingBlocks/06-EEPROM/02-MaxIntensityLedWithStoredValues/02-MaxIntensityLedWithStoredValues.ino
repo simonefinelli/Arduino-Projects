@@ -9,6 +9,7 @@
 #define LED_PIN_1 3
 #define POTENTIOMETER_PIN A5
 #define DELAY 100
+#define EEPROM_ADDRESS 0
 
 unsigned long previous_time = 0;
 unsigned long curr_time = millis();
@@ -25,7 +26,7 @@ void setup() {
   // REMEMBER: Analog IN pin must not be initialize with pinMode()
   
   // set led brighteness using stored default settigs
-  max_led_brightness = EEPROM.read(0);
+  max_led_brightness = EEPROM.read(EEPROM_ADDRESS);
   analogWrite(LED_PIN_1, max_led_brightness);
 }
 
@@ -38,7 +39,7 @@ void loop()
       buffer = Serial.parseInt();
       if (buffer >= 50 && buffer <= 255) {
         Serial.println("Max Intensity default value updated to: " + String(buffer));
-        EEPROM.write(0, buffer);  // store new default value into EEPROM at address 0x00
+        EEPROM.write(EEPROM_ADDRESS, buffer);  // store new default value into EEPROM at address 0x00
         max_led_brightness = buffer;  // for the current session
       } else {
         Serial.println("Value must be in the range 50-255!");
