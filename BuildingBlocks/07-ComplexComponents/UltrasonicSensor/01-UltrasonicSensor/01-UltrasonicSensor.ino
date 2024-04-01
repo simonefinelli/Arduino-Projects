@@ -27,15 +27,67 @@
  *
  * We described a typical HIGH mode setup, but we can redefine that steps using a LOW mode setup by reverse
  * the high and low states.
+ * NOTE: the HIGH/LOW mode depends on the sensor. HC-SR04 uses HIGH mode!
  */
 
+#define ECHO_PIN 3
+#define TRIGGER_PIN 4
+
+unsigned long last_time_trigget = millis();  // trig the ultrasonic sensor time
+unsigned long ultrasonic_delay = 100; // [ms] - listening time
 
 void setup() {
-  // put your setup code here, to run once:
+  // serial monitor
+  Serial.begin(115200);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(TRIGGER_PIN, OUTPUT);
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  unsigned long curr_time = millis();
 
+  if (curr_time - last_time_trigget > ultrasonic_delay) {
+    last_time_trigget += ultrasonic_delay;
+    // trigger the ultrasonic sensor
+    trig_ultranosic_sensor();
+
+    // read pulse on echo pin
+    Serial.println(get_distance());
+  }
 }
+
+/**
+ * The function changes the sensor's status to HIGH for 10µs.
+ */
+void trig_ultranosic_sensor() {
+  // reset status of sensor (just as a precaution)
+  digitalWrite(TRIGGER_PIN, LOW);
+  delayMicroseconds(2);
+
+  // emit the pulse
+  digitalWrite(TRIGGER_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN, LOW);
+}
+
+/**
+ * The function reads from ECHO pin to get data from the sensor and convert
+ * it into a readable distance.
+ * 
+ * Returns the distance in cm.
+ */
+double get_distance() {
+  unsigned long duration = pulseIn(ECHO_PIN, HIGH);  // using HIGH MODE - the function return the duration in µs.
+
+  // distance = duration * speed (sound in air in this case - 340m/s --> 0.034 cm/µs)
+  // duration * (0.034 / 2) (the wawe run across two time - forward and backward)
+  // the line above can be replaces with constant 58 or 148!
+  double distance = double(duration) / 58.0;  // [cm] - (148.0: inches)
+  return distance;
+}
+
+
+
+
+
