@@ -78,7 +78,10 @@ void trig_ultranosic_sensor() {
  * Returns the distance in cm.
  */
 double get_distance() {
+  unsigned long pulsein_start = micros();
   unsigned long duration = pulseIn(ECHO_PIN, HIGH);  // using HIGH MODE - the function return the duration in µs.
+  unsigned long pulsein_end = micros();
+  Serial.println("The duration of punseIn() in microseconds is: " + String(pulsein_end - pulsein_start));
 
   // distance = duration * speed (sound in air in this case - 340m/s --> 0.034 cm/µs)
   // duration * (0.034 / 2) (the wawe run across two time - forward and backward)
