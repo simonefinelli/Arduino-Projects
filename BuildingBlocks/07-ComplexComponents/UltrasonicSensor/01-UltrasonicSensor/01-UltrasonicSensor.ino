@@ -89,8 +89,3 @@ double get_distance() {
   double distance = double(duration) / 58.0;  // [cm] - (148.0: inches)
   return distance;
 }
-
-
-
-
-
