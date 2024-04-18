@@ -1,8 +1,8 @@
 /**
  * In this program we turn-on 3 different leds using the distance read by the ultrasonic sensor:
- *  - 10cm: turn-on yellow led;
- *  - 20cm: turn-on green led;
- *  - 30cm: turn-on red led. 
+ *  - 0-10cm: turn-on yellow led;
+ *  - 10-20cm: turn-on green led;
+ *  - >20cm: turn-on red led. 
  */
 
 #define LED_1_PIN 5
@@ -10,6 +10,7 @@
 #define LED_3_PIN 7
 #define ECHO_PIN 3
 #define TRIGGER_PIN 4
+#define MAX_DISTANCE 400
 
 unsigned long last_time_trigget = millis();  // trig the ultrasonic sensor time
 unsigned long ultrasonic_delay = 100; // [ms] - listening time
@@ -18,6 +19,9 @@ unsigned led_status[3] = {0};  // handle on-off of leds
 volatile unsigned long pulsein_time_begin;
 volatile unsigned long pulsein_time_end;
 volatile bool new_distance_available_flag = false;
+
+// to avoid reading incorrect value from the sensor (especially in cheaper one)
+double previus_distance = MAX_DISTANCE; // [cm]
 
 void setup() {
   // serial monitor
@@ -52,9 +56,9 @@ void loop() {
       double distance = get_distance();
       Serial.println(distance);
 
-      if (distance < 10) {
+      if (distance <= 10) {
         led_status[0] = HIGH;
-      } else if (distance < 20) {
+      } else if (distance <= 20) {
         led_status[1] = HIGH;
       } else {
         led_status[2] = HIGH;  
@@ -101,6 +105,12 @@ double get_distance() {
   // duration * (0.034 / 2) (the wawe run across two time - forward and backward)
   // the line above can be replaces with constant 58 or 148!
   double distance = double(duration) / 58.0;  // [cm] - (148.0: inches)
+  if (distance > MAX_DISTANCE) {
+    return previus_distance;
+  }
+  distance = previus_distance * 0.70 + distance * 0.30; // complementary filter: an average between the previose distance and the current distance. - to get a smoother value reading
+                                                        // tip: adjust the two scalars to change the contribution
+  previus_distance = distance;
   return distance;
 }
 
