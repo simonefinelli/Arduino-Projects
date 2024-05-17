@@ -40,7 +40,7 @@ LiquidCrystal lcd(
 );
 
 void setup() {
-  lcd.begin(LCD_WIDTH, LCD_HEIGHT);
+  lcd.begin(LCD_WIDTH, LCD_HEIGHT);  // the LCD is a matrix!
 
   lcd.print("Hello World");
 }
